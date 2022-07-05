@@ -1,6 +1,6 @@
 job("Build, Test, Deploy"){
     container("maven:3-openjdk-8-slim"){ 
-        env["TD_VERSION"] = Params("uno_version")
+        env["TD_VERSION"] = Params("td_version")
         shellScript("Build Test Deploy") {
             content = """
                 echo Setup ...
