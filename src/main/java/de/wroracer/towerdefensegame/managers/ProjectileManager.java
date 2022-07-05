@@ -109,6 +109,7 @@ public class ProjectileManager {
     }
 
     private void explodeOnEnemies(Projectile p) {
+        playing.getGame().getSoundManager().playSound("bumm");
         for (Enemy e : playing.getEnemyManager().getEnemies()) {
             if (e.isAlive()) {
                 float radius = 40.0f;

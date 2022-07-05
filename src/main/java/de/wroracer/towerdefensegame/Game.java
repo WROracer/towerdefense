@@ -2,6 +2,7 @@ package de.wroracer.towerdefensegame;
 
 import de.wroracer.towerdefensegame.inputs.KeyboardListener;
 import de.wroracer.towerdefensegame.inputs.MyMouseListener;
+import de.wroracer.towerdefensegame.managers.SoundManager;
 import de.wroracer.towerdefensegame.managers.TileManager;
 import de.wroracer.towerdefensegame.scenes.*;
 import de.wroracer.towerdefensegame.scenes.Menu;
@@ -39,6 +40,7 @@ public class Game extends JFrame implements Runnable {
     private Settings settings;
     private Editing editing;
     private GameOver gameOver;
+    private SoundManager soundManager;
 
     private TileManager tileManager;
 
@@ -85,6 +87,7 @@ public class Game extends JFrame implements Runnable {
         render = new Render(this);
         editing = new Editing(this);
         gameOver = new GameOver(this);
+        soundManager = new SoundManager(this);
 
 
         gameScreen = new GameScreen(this);
@@ -182,5 +185,9 @@ public class Game extends JFrame implements Runnable {
 
     public GameOver getGameOver() {
         return gameOver;
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 }

@@ -16,4 +16,5 @@ public class PathPoint {
     public int getyCord() {
         return yCord;
     }
+
 }

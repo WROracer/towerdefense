@@ -1,8 +1,12 @@
 package de.wroracer.towerdefensegame.util;
 
+import de.wroracer.towerdefensegame.managers.SoundManager;
 import de.wroracer.towerdefensegame.objects.PathPoint;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -25,6 +29,23 @@ public class LoadSave {
             e.printStackTrace();
         }
         return img;
+    }
+
+    public static AudioInputStream getAudioInputStream(String sound){
+        String url = "/sounds/"+sound+".wav";
+        InputStream stream = LoadSave.class.getResourceAsStream(url);
+        if (stream == null){
+            return null;
+        }
+        AudioInputStream audioStream = null;
+        try {
+            assert stream != null;
+            audioStream = AudioSystem.getAudioInputStream(stream);
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return audioStream;
     }
 
     //txt file
