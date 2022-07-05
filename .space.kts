@@ -6,13 +6,7 @@ job("Build, Test, Deploy"){
                 echo Setup ...
                 mvn versions:set -DnewVersion=${'$'}TD_VERSION${'$'}JB_SPACE_EXECUTION_NUMBER
                 echo Setting new Version: ${'$'}TD_VERSION${'$'}JB_SPACE_EXECUTION_NUMBER
-                
-                echo Build artifacts...
-                mvn versions:set -DnewVersion=${'$'}TD_VERSION${'$'}JB_SPACE_EXECUTION_NUMBER
-                mvn package -DskipTests 
-                    -DspaceUsername=${'$'}JB_SPACE_CLIENT_ID \
-                    -DspacePassword=${'$'}JB_SPACE_CLIENT_TOKEN
-                
+    
                 echo Publishing Artifacts
                 set -e -x -u
                 mvn deploy -DskipTests
