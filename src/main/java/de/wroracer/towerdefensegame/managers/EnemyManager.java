@@ -1,16 +1,26 @@
 package de.wroracer.towerdefensegame.managers;
 
-import de.wroracer.towerdefensegame.enemis.*;
-import de.wroracer.towerdefensegame.objects.PathPoint;
-import de.wroracer.towerdefensegame.scenes.Playing;
-import de.wroracer.towerdefensegame.util.LoadSave;
+import static de.wroracer.towerdefensegame.util.Constants.Enemies.BAT;
+import static de.wroracer.towerdefensegame.util.Constants.Enemies.KNIGHT;
+import static de.wroracer.towerdefensegame.util.Constants.Enemies.ORC;
+import static de.wroracer.towerdefensegame.util.Constants.Enemies.WOLF;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static de.wroracer.towerdefensegame.util.Constants.*;
-import static de.wroracer.towerdefensegame.util.Constants.Enemies.*;
+import de.wroracer.towerdefensegame.enemis.Bat;
+import de.wroracer.towerdefensegame.enemis.Enemy;
+import de.wroracer.towerdefensegame.enemis.Knight;
+import de.wroracer.towerdefensegame.enemis.Orc;
+import de.wroracer.towerdefensegame.enemis.Wolf;
+import de.wroracer.towerdefensegame.objects.PathPoint;
+import de.wroracer.towerdefensegame.scenes.Playing;
+import de.wroracer.towerdefensegame.util.Constants.Direction;
+import de.wroracer.towerdefensegame.util.Constants.Enemies;
+import de.wroracer.towerdefensegame.util.Constants.Tiles;
+import de.wroracer.towerdefensegame.util.LoadSave;
 
 public class EnemyManager {
 
@@ -22,10 +32,9 @@ public class EnemyManager {
 
     private int hpBarWith = 20;
 
+    private PathPoint start, end;
 
-    private PathPoint start,end;
-
-    public EnemyManager(Playing playing, PathPoint start, PathPoint end){
+    public EnemyManager(Playing playing, PathPoint start, PathPoint end) {
         this.playing = playing;
         this.start = start;
         this.end = end;
@@ -39,13 +48,13 @@ public class EnemyManager {
     }
 
     private void loadEffectImgs() {
-        slowEffect = LoadSave.getSpriteAtlas().getSubimage(32*9,32*2,32,32);
+        slowEffect = LoadSave.getSpriteAtlas().getSubimage(32 * 9, 32 * 2, 32, 32);
     }
 
     private void loadEnemyImgs() {
         BufferedImage atlas = LoadSave.getSpriteAtlas();
         for (int i = 0; i < 4; i++) {
-            enemyImgs[i] = atlas.getSubimage(i * 32,32,32,32);
+            enemyImgs[i] = atlas.getSubimage(i * 32, 32, 32, 32);
         }
     }
 
@@ -53,26 +62,26 @@ public class EnemyManager {
         addEnemy(type);
     }
 
-    private void addEnemy(int enemyType){
-        int x = start.getxCord() *32;
-        int y = start.getyCord() *32;
-        switch (enemyType){
+    private void addEnemy(int enemyType) {
+        int x = start.getxCord() * 32;
+        int y = start.getyCord() * 32;
+        switch (enemyType) {
             case ORC:
-                enemies.add(new Orc(x,y,enemies.size(),this));
+                enemies.add(new Orc(x, y, enemies.size(), this));
                 break;
             case BAT:
-                enemies.add(new Bat(x,y,enemies.size(),this));
+                enemies.add(new Bat(x, y, enemies.size(), this));
                 break;
             case KNIGHT:
-                enemies.add(new Knight(x,y,enemies.size(),this));
+                enemies.add(new Knight(x, y, enemies.size(), this));
                 break;
             case WOLF:
-                enemies.add(new Wolf(x,y,enemies.size(),this));
+                enemies.add(new Wolf(x, y, enemies.size(), this));
                 break;
         }
     }
 
-    public void update(){
+    public void update() {
 
         for (Enemy e : enemies) {
             //is next tile Road(pos, dir)
@@ -81,23 +90,22 @@ public class EnemyManager {
         }
     }
 
-
     private void updateEnemyMove(Enemy e) {
         //e pos
         //e dir
         //tile at new pos
-        if (e.getLastDirection() == -1){
+        if (e.getLastDirection() == -1) {
             setNewDirectionAndMove(e);
         }
-        int newX = (int) ((int) e.getX() + getSpeedAndWidth(e.getLastDirection(),e.getEnemyType()));
-        int newY = (int) ((int) e.getY() + getSpeedAndHeight(e.getLastDirection(),e.getEnemyType()));
-        if (getTileType(newX,newY) == Tiles.ROAD){
-            e.move(Enemies.getSpeed(e.getEnemyType()),e.getLastDirection());
-        }else if (isAtEnd(e)){
+        int newX = (int) ((int) e.getX() + getSpeedAndWidth(e.getLastDirection(), e.getEnemyType()));
+        int newY = (int) ((int) e.getY() + getSpeedAndHeight(e.getLastDirection(), e.getEnemyType()));
+        if (getTileType(newX, newY) == Tiles.ROAD) {
+            e.move(Enemies.getSpeed(e.getEnemyType()), e.getLastDirection());
+        } else if (isAtEnd(e)) {
             e.kill();
             playing.removeOneLive();
             //Reached the end
-        }else {
+        } else {
             setNewDirectionAndMove(e);
         }
     }
@@ -105,102 +113,101 @@ public class EnemyManager {
     private void setNewDirectionAndMove(Enemy e) {
         int dir = e.getLastDirection();
         //move into current tile
-        int xCord = (int) (e.getX()/32);
-        int yCord = (int) (e.getY()/32);
-        fixEnemyOffsetTile(e,dir,xCord,yCord);
-        if (isAtEnd(e)){
+        int xCord = (int) (e.getX() / 32);
+        int yCord = (int) (e.getY() / 32);
+        fixEnemyOffsetTile(e, dir, xCord, yCord);
+        if (isAtEnd(e)) {
             return;
         }
-        if (dir == Direction.LEFT || dir == Direction.RIGHT){
-            int newY = (int) (e.getY() + getSpeedAndHeight(Direction.UP,e.getEnemyType()));
-            if (getTileType((int) e.getX(),newY)== Tiles.ROAD){
-                e.move(Enemies.getSpeed(e.getEnemyType()),Direction.UP);
-            }else {
-                e.move(Enemies.getSpeed(e.getEnemyType()),Direction.DOWN);
+        if (dir == Direction.LEFT || dir == Direction.RIGHT) {
+            int newY = (int) (e.getY() + getSpeedAndHeight(Direction.UP, e.getEnemyType()));
+            if (getTileType((int) e.getX(), newY) == Tiles.ROAD) {
+                e.move(Enemies.getSpeed(e.getEnemyType()), Direction.UP);
+            } else {
+                e.move(Enemies.getSpeed(e.getEnemyType()), Direction.DOWN);
             }
-        }else {
-            int newX = (int) (e.getX() + getSpeedAndWidth(Direction.RIGHT,e.getEnemyType()));
-            if (getTileType(newX, (int) e.getY())== Tiles.ROAD){
-                e.move(Enemies.getSpeed(e.getEnemyType()),Direction.RIGHT);
-            }else {
-                e.move(Enemies.getSpeed(e.getEnemyType()),Direction.LEFT);
+        } else {
+            int newX = (int) (e.getX() + getSpeedAndWidth(Direction.RIGHT, e.getEnemyType()));
+            if (getTileType(newX, (int) e.getY()) == Tiles.ROAD) {
+                e.move(Enemies.getSpeed(e.getEnemyType()), Direction.RIGHT);
+            } else {
+                e.move(Enemies.getSpeed(e.getEnemyType()), Direction.LEFT);
             }
         }
     }
 
     private void fixEnemyOffsetTile(Enemy e, int dir, int xCord, int yCord) {
-        switch (dir){
+        switch (dir) {
             case Direction.RIGHT:
                 //if (xCord<19){
                 //    xCord++;
                 //}
                 break;
             case Direction.DOWN:
-                if (yCord>19){
+                if (yCord > 19) {
                     yCord++;
                 }
                 break;
         }
-        e.setPosition(xCord*32,yCord*32);
+        e.setPosition(xCord * 32, yCord * 32);
     }
 
-
     private boolean isAtEnd(Enemy e) {
-        if (e.getX() == end.getxCord()*32){
+        if (e.getX() == end.getxCord() * 32) {
             return e.getY() == end.getyCord() * 32;
         }
         return false;
     }
 
     private int getTileType(int x, int y) {
-        return playing.getTileType(x,y);
+        return playing.getTileType(x, y);
     }
 
-    private float getSpeedAndWidth(int dir,int enemyType) {
-    if (dir == Direction.LEFT)
+    private float getSpeedAndWidth(int dir, int enemyType) {
+        if (dir == Direction.LEFT)
             return -Enemies.getSpeed(enemyType);
-        else if (dir==Direction.RIGHT)
-            return Enemies.getSpeed(enemyType)+32;
+        else if (dir == Direction.RIGHT)
+            return Enemies.getSpeed(enemyType) + 32;
         return 0;
     }
 
-    private float getSpeedAndHeight(int dir,int enemyType) {
+    private float getSpeedAndHeight(int dir, int enemyType) {
         if (dir == Direction.UP)
             return -Enemies.getSpeed(enemyType);
-        else if (dir==Direction.DOWN)
-            return Enemies.getSpeed(enemyType)+32;
+        else if (dir == Direction.DOWN)
+            return Enemies.getSpeed(enemyType) + 32;
         return 0;
     }
 
-    public void render(Graphics g){
+    public void render(Graphics g) {
         for (Enemy enemy : enemies) {
             if (enemy.isAlive()) {
                 renderEnemy(g, enemy);
                 renderHealthBar(g, enemy);
-                renderEffects(g,enemy);
+                renderEffects(g, enemy);
             }
         }
     }
 
     private void renderEffects(Graphics g, Enemy e) {
-        if (e.isSlowed()){
-            g.drawImage(slowEffect,(int)e.getX(),(int)e.getY(),null);
+        if (e.isSlowed()) {
+            g.drawImage(slowEffect, (int) e.getX(), (int) e.getY(), null);
         }
     }
 
     private void renderHealthBar(Graphics g, Enemy e) {
         g.setColor(new Color(131, 2, 2));
-        g.fillRect((int)e.getX() + 16 - (hpBarWith/2),(int)e.getY() - 10,hpBarWith,3);
+        g.fillRect((int) e.getX() + 16 - (hpBarWith / 2), (int) e.getY() - 10, hpBarWith, 3);
         g.setColor(Color.RED);
-        g.fillRect((int)e.getX() + 16 - (hpBarWith/2),(int)e.getY() - 10,getNewBarWith(e),3);
+        g.fillRect((int) e.getX() + 16 - (hpBarWith / 2), (int) e.getY() - 10, getNewBarWith(e), 3);
     }
 
-    private int getNewBarWith(Enemy e){
-        return (int) ( hpBarWith * e.getHealthBarPercent());
+    private int getNewBarWith(Enemy e) {
+        return (int) (hpBarWith * e.getHealthBarPercent());
     }
 
     private void renderEnemy(Graphics g, Enemy e) {
-        g.drawImage(enemyImgs[e.getEnemyType()],(int) e.getX(),(int)e.getY(),null);
+        g.drawImage(enemyImgs[e.getEnemyType()], (int) e.getX(), (int) e.getY(), null);
     }
 
     public ArrayList<Enemy> getEnemies() {

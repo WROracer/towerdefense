@@ -1,16 +1,18 @@
 package de.wroracer.towerdefensegame.enemis;
 
+import static de.wroracer.towerdefensegame.util.Constants.Direction.DOWN;
+import static de.wroracer.towerdefensegame.util.Constants.Direction.LEFT;
+import static de.wroracer.towerdefensegame.util.Constants.Direction.RIGHT;
+import static de.wroracer.towerdefensegame.util.Constants.Direction.UP;
+
+import java.awt.Rectangle;
+
 import de.wroracer.towerdefensegame.managers.EnemyManager;
 import de.wroracer.towerdefensegame.util.Constants;
 
-import java.awt.*;
-import java.util.List;
-
-import static de.wroracer.towerdefensegame.util.Constants.Direction.*;
-
 public abstract class Enemy {
 
-    protected float x,y;
+    protected float x, y;
     protected Rectangle bounds;
     protected int health;
     protected int maxHealth;
@@ -26,12 +28,12 @@ public abstract class Enemy {
 
     //private List<Position> path;
 
-    public Enemy(float x, float y, int id, int enemyType, EnemyManager enemyManager){
-        this.x =x;
+    public Enemy(float x, float y, int id, int enemyType, EnemyManager enemyManager) {
+        this.x = x;
         this.y = y;
         this.id = id;
         this.enemyType = enemyType;
-        bounds = new Rectangle((int)x,(int)y,32,32);
+        bounds = new Rectangle((int) x, (int) y, 32, 32);
         lastDirection = -1;
         this.enemyManager = enemyManager;
         //path = Astar.astar(Astar.lvlToAstarMaze(enemyManager.getPlaying()),enemyManager.getPlaying().getStartPos(),enemyManager.getPlaying().getEndPos());
@@ -39,58 +41,58 @@ public abstract class Enemy {
         setStartHealth();
     }
 
-    private void setStartHealth(){
+    private void setStartHealth() {
         health = Constants.Enemies.getStartHealth(enemyType);
         maxHealth = health;
     }
 
-    public float getHealthBarPercent(){
-        return health/(float)maxHealth;
+    public float getHealthBarPercent() {
+        return health / (float) maxHealth;
     }
 
-    public void hurt(int dmg){
+    public void hurt(int dmg) {
         this.health -= dmg;
-        if (health <= 0){
+        if (health <= 0) {
             alive = false;
             enemyManager.rewardPlayer(enemyType);
         }
     };
 
-    public void kill(){
+    public void kill() {
         alive = false;
         health = 0;
     };
 
-    public  void slow(){
+    public void slow() {
         slowTick = 0;
     };
 
-    public void move(float speed,int direction){
+    public void move(float speed, int direction) {
         lastDirection = direction;
 
-        if (slowTick < slowTickLimit){
+        if (slowTick < slowTickLimit) {
             slowTick++;
             speed *= 0.5f;
         }
 
-        switch (direction){
+        switch (direction) {
             case LEFT:
-                this.x-=speed;
+                this.x -= speed;
                 break;
             case UP:
-                this.y-=speed;
+                this.y -= speed;
                 break;
             case RIGHT:
-                this.x+=speed;
+                this.x += speed;
                 break;
             case DOWN:
-                this.y+=speed;
+                this.y += speed;
                 break;
         }
         updateHitBox();
     }
 
-    private void updateHitBox(){
+    private void updateHitBox() {
         bounds.x = (int) x;
         bounds.y = (int) y;
     };
@@ -127,7 +129,7 @@ public abstract class Enemy {
         this.lastDirection = lastDirection;
     }
 
-   /**
+    /**
     *  Don´t use this for move
     */
     public void setPosition(int x, int y) {
@@ -139,9 +141,8 @@ public abstract class Enemy {
         return alive;
     }
 
-
-    public boolean isSlowed(){
-        return slowTick<slowTickLimit;
+    public boolean isSlowed() {
+        return slowTick < slowTickLimit;
     }
 
 }

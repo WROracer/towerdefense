@@ -1,7 +1,8 @@
 package de.wroracer.towerdefensegame.ui;
 
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class MyButton {
     private int x, y, width, height;
@@ -12,7 +13,8 @@ public class MyButton {
 
     private Rectangle bounds;
     private int id;
-    public MyButton(int x,int y,int width,int height,String text){
+
+    public MyButton(int x, int y, int width, int height, String text) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -22,21 +24,21 @@ public class MyButton {
         initBounds();
     }
 
-    public MyButton(int x,int y,int width,int height,String text,int id){
-        this(x,y,width,height,text);
+    public MyButton(int x, int y, int width, int height, String text, int id) {
+        this(x, y, width, height, text);
         this.id = id;
     }
 
-    public void resetBooleans(){
+    public void resetBooleans() {
         this.mouseOver = false;
         this.mousePressed = false;
     }
 
-    private void initBounds(){
-        bounds = new Rectangle(x,y,width,height);
+    private void initBounds() {
+        bounds = new Rectangle(x, y, width, height);
     }
 
-    public void render(Graphics g){
+    public void render(Graphics g) {
         //Body
         renderBody(g);
 
@@ -55,12 +57,12 @@ public class MyButton {
     }
 
     private void renderBorder(Graphics g) {
-        if (mousePressed){
+        if (mousePressed) {
             g.setColor(Color.BLACK);
             g.drawRect(x, y, width, height);
-            g.drawRect(x+1, y+1, width-2, height-2);
-            g.drawRect(x+2, y+2, width-4, height-4);
-        }else {
+            g.drawRect(x + 1, y + 1, width - 2, height - 2);
+            g.drawRect(x + 2, y + 2, width - 4, height - 4);
+        } else {
             g.setColor(Color.BLACK);
             g.drawRect(x, y, width, height);
         }
@@ -76,11 +78,11 @@ public class MyButton {
         g.fillRect(x, y, width, height);
     }
 
-    public Rectangle getBounds(){
+    public Rectangle getBounds() {
         return bounds;
     }
 
-    public void setMouseOver(boolean mouseOver){
+    public void setMouseOver(boolean mouseOver) {
         this.mouseOver = mouseOver;
     }
 

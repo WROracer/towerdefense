@@ -1,16 +1,14 @@
 package de.wroracer.towerdefensegame;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
 import de.wroracer.towerdefensegame.inputs.KeyboardListener;
 import de.wroracer.towerdefensegame.inputs.MyMouseListener;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Random;
-
 public class GameScreen extends JPanel {
-
 
     private Dimension size;
     private Game game;
@@ -20,7 +18,7 @@ public class GameScreen extends JPanel {
 
     public GameScreen(Game game) {
         this.game = game;
-        size = new Dimension(640,800);
+        size = new Dimension(640, 800);
         setPanelSize();
     }
 
