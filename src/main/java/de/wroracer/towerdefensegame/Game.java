@@ -1,18 +1,17 @@
 package de.wroracer.towerdefensegame;
 
-import de.wroracer.towerdefensegame.inputs.KeyboardListener;
-import de.wroracer.towerdefensegame.inputs.MyMouseListener;
-import de.wroracer.towerdefensegame.managers.TileManager;
-import de.wroracer.towerdefensegame.scenes.*;
-import de.wroracer.towerdefensegame.scenes.Menu;
-import de.wroracer.towerdefensegame.util.LoadSave;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.swing.JFrame;
+
+import de.wroracer.towerdefensegame.managers.TileManager;
+import de.wroracer.towerdefensegame.scenes.Editing;
+import de.wroracer.towerdefensegame.scenes.GameOver;
+import de.wroracer.towerdefensegame.scenes.Menu;
+import de.wroracer.towerdefensegame.scenes.Playing;
+import de.wroracer.towerdefensegame.scenes.Settings;
+import de.wroracer.towerdefensegame.util.LoadSave;
 
 public class Game extends JFrame implements Runnable {
 
@@ -24,13 +23,11 @@ public class Game extends JFrame implements Runnable {
     }
 
     private static final double FPS_SET = 120;
-    private static final int UPS_SET =  60;
+    private static final int UPS_SET = 60;
 
     private GameScreen gameScreen;
 
     private Thread gameThread;
-
-
 
     //Classes
     private Render render;
@@ -57,20 +54,20 @@ public class Game extends JFrame implements Runnable {
         setVisible(true);
     }
 
-    private void openInMiddleOfScreen(){
+    private void openInMiddleOfScreen() {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension game = gameScreen.getMaximumSize();
-        int x = (int) (screen.getWidth()/2);
-        int y = (int) (screen.getHeight()/2);
-        x-=game.getWidth()/2;
-        y-=game.getHeight()/2;
+        int x = (int) (screen.getWidth() / 2);
+        int y = (int) (screen.getHeight() / 2);
+        x -= game.getWidth() / 2;
+        y -= game.getHeight() / 2;
 
-        setLocation(x,y);
+        setLocation(x, y);
     }
 
     private void createDefaultLevel() {
         int[] arr = new int[400];
-        for (int i = 0; i < arr.length;i++){
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = 0;
         }
         LoadSave.createLevel(arr);
@@ -86,15 +83,11 @@ public class Game extends JFrame implements Runnable {
         editing = new Editing(this);
         gameOver = new GameOver(this);
 
-
         gameScreen = new GameScreen(this);
     }
 
-
-
-
-    public void updateGame(){
-        switch (GameStates.gameStates){
+    public void updateGame() {
+        switch (GameStates.gameStates) {
             case MENU -> menu.update();
             case PLAYING -> playing.update();
             case SETTINGS -> settings.update();
@@ -162,7 +155,6 @@ public class Game extends JFrame implements Runnable {
     public Menu getMenu() {
         return menu;
     }
-
 
     public Playing getPlaying() {
         return playing;

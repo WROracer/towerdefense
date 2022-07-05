@@ -4,15 +4,16 @@ import java.awt.image.BufferedImage;
 
 public class Tile {
     private BufferedImage[] sprites;
-    private  int id;
+    private int id;
     private int tileType;
-    public Tile(BufferedImage sprite, int id,int tileType){
-        this.sprites = new BufferedImage[]{sprite};
+
+    public Tile(BufferedImage sprite, int id, int tileType) {
+        this.sprites = new BufferedImage[] { sprite };
         this.id = id;
         this.tileType = tileType;
     }
 
-    public Tile(BufferedImage[] sprites, int id,int tileType){
+    public Tile(BufferedImage[] sprites, int id, int tileType) {
         this.sprites = sprites;
         this.tileType = tileType;
         this.id = id;
@@ -22,7 +23,7 @@ public class Tile {
         return sprites[0];
     }
 
-    public BufferedImage getSprite(int animationIndex){
+    public BufferedImage getSprite(int animationIndex) {
         return sprites[animationIndex];
     }
 
@@ -31,7 +32,7 @@ public class Tile {
     }
 
     public boolean isAnimation() {
-        return sprites.length >1;
+        return sprites.length > 1;
     }
 
     public int getTileType() {

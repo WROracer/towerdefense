@@ -6,6 +6,7 @@ public enum GameStates {
     SETTINGS,
     EDIT,
     GAME_OVER;
+
     public static GameStates gameStates = MENU;
 
     public static void setGameStates(GameStates gameStates) {

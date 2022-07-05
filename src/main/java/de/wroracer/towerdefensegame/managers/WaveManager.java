@@ -1,26 +1,26 @@
 package de.wroracer.towerdefensegame.managers;
 
-import de.wroracer.towerdefensegame.events.Wave;
-import de.wroracer.towerdefensegame.scenes.Playing;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import de.wroracer.towerdefensegame.events.Wave;
+import de.wroracer.towerdefensegame.scenes.Playing;
+
 public class WaveManager {
     private Playing playing;
 
     private List<Wave> waves = new ArrayList<>();
-    private int enemyIndex,waveIndex;
+    private int enemyIndex, waveIndex;
 
     private int enemySpawnTickLimit = 60;
     private int enemySpawnTick = enemySpawnTickLimit;
 
-    private int waveTickLimit = 60*5;
+    private int waveTickLimit = 60 * 5;
     private int waveTick = 0;
 
-    private boolean waveStartTimer,waveTickTimerOver;
+    private boolean waveStartTimer, waveTickTimerOver;
 
     public WaveManager(Playing playing) {
         this.playing = playing;
@@ -28,30 +28,30 @@ public class WaveManager {
     }
 
     private void createWaves() {
-        waves.add(new Wave(new ArrayList<>(Arrays.asList(0,0,0,0,0,0,0,0,0,1))));
-        waves.add(new Wave(new ArrayList<>(Arrays.asList(2,0,0,0,0,0,0,0,0,1))));
-        waves.add(new Wave(new ArrayList<>(Arrays.asList(2,2,2,0,1,1,0,0,0,1))));
-        waves.add(new Wave(new ArrayList<>(Arrays.asList(3,2,2,0,0,0,2,0,1,1))));
-        waves.add(new Wave(new ArrayList<>(Arrays.asList(3,2,2,1,1,1,2,0,1,1))));
+        waves.add(new Wave(new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 1))));
+        waves.add(new Wave(new ArrayList<>(Arrays.asList(2, 0, 0, 0, 0, 0, 0, 0, 0, 1))));
+        waves.add(new Wave(new ArrayList<>(Arrays.asList(2, 2, 2, 0, 1, 1, 0, 0, 0, 1))));
+        waves.add(new Wave(new ArrayList<>(Arrays.asList(3, 2, 2, 0, 0, 0, 2, 0, 1, 1))));
+        waves.add(new Wave(new ArrayList<>(Arrays.asList(3, 2, 2, 1, 1, 1, 2, 0, 1, 1))));
 
         Random r = new Random();
-        for (int w = 0;w!=5;w++){
-            int e = r.nextInt(20)+10;
+        for (int w = 0; w != 5; w++) {
+            int e = r.nextInt(20) + 10;
             Wave wave = new Wave();
-            for (int i = 0;i!=e;i++){
+            for (int i = 0; i != e; i++) {
                 wave.addEnemy(r.nextInt(3));
             }
             waves.add(wave);
         }
     }
 
-    public void update(){
-        if (enemySpawnTick < enemySpawnTickLimit){
+    public void update() {
+        if (enemySpawnTick < enemySpawnTickLimit) {
             enemySpawnTick++;
         }
-        if (waveStartTimer){
+        if (waveStartTimer) {
             waveTick++;
-            if (waveTick>=waveTickLimit){
+            if (waveTick >= waveTickLimit) {
                 waveTickTimerOver = true;
             }
         }
@@ -65,14 +65,14 @@ public class WaveManager {
         waveStartTimer = true;
     }
 
-    public void increaseWaveIndex(){
+    public void increaseWaveIndex() {
         waveIndex++;
         waveTick = 0;
         waveTickTimerOver = false;
         waveStartTimer = false;
     }
 
-    public int getNextEnemy(){
+    public int getNextEnemy() {
         enemySpawnTick = 0;
         return waves.get(waveIndex).getEnemyList().get(enemyIndex++);
     }
@@ -85,7 +85,7 @@ public class WaveManager {
         return enemySpawnTick >= enemySpawnTickLimit;
     }
 
-    public boolean isThereMoreEnemiesInWave(){
+    public boolean isThereMoreEnemiesInWave() {
         return enemyIndex < waves.get(waveIndex).getEnemyList().size();
     }
 
@@ -101,9 +101,9 @@ public class WaveManager {
         return waveIndex;
     }
 
-    public float getTimeLeft(){
+    public float getTimeLeft() {
         float ticksLeft = waveTickLimit - waveTick;
-        return ticksLeft /60.0f;
+        return ticksLeft / 60.0f;
     }
 
     public boolean isWaveStartTimer() {

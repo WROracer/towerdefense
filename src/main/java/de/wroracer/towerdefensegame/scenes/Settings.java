@@ -1,14 +1,16 @@
 package de.wroracer.towerdefensegame.scenes;
 
+import static de.wroracer.towerdefensegame.GameStates.MENU;
+import static de.wroracer.towerdefensegame.GameStates.setGameStates;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+
 import de.wroracer.towerdefensegame.Game;
 import de.wroracer.towerdefensegame.ui.MyButton;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-
-import static de.wroracer.towerdefensegame.GameStates.*;
-
-public class Settings  extends GameScene implements SceneMethods {
+public class Settings extends GameScene implements SceneMethods {
     public Settings(Game game) {
         super(game);
         initButtons();
@@ -24,13 +26,13 @@ public class Settings  extends GameScene implements SceneMethods {
     private MyButton bMenu;
 
     private void initButtons() {
-        bMenu = new MyButton(2, 2, 100, 30,"Menu");
+        bMenu = new MyButton(2, 2, 100, 30, "Menu");
 
     }
 
     @Override
     public void mouseClicked(int x, int y) {
-        if (bMenu.getBounds().contains(x,y)){
+        if (bMenu.getBounds().contains(x, y)) {
             setGameStates(MENU);
         }
     }

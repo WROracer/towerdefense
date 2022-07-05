@@ -1,48 +1,50 @@
 package de.wroracer.towerdefensegame.objects;
 
-
-import de.wroracer.towerdefensegame.util.Constants;
-
-import static  de.wroracer.towerdefensegame.util.Constants.Towers.*;
+import static de.wroracer.towerdefensegame.util.Constants.Towers.ARCHER;
+import static de.wroracer.towerdefensegame.util.Constants.Towers.CANON;
+import static de.wroracer.towerdefensegame.util.Constants.Towers.WIZARD;
+import static de.wroracer.towerdefensegame.util.Constants.Towers.getStartCoolDown;
+import static de.wroracer.towerdefensegame.util.Constants.Towers.getStartDamage;
+import static de.wroracer.towerdefensegame.util.Constants.Towers.getStartRange;
 
 public class Tower {
 
-    private int x,y,id,towerType,cdTick,damage;
-    private float range,coolDown;
+    private int x, y, id, towerType, cdTick, damage;
+    private float range, coolDown;
     private int tier;
 
-    public Tower(int x,int y,int id,int towerType){
+    public Tower(int x, int y, int id, int towerType) {
         this.x = x;
         this.y = y;
         this.id = id;
-        this.towerType =towerType;
+        this.towerType = towerType;
         tier = 1;
         setDefaultDamage();
         setDefaultRange();
         setDefaultCoolDown();
     }
 
-    public void upgradeTower(){
+    public void upgradeTower() {
         this.tier++;
-        switch (towerType){
+        switch (towerType) {
             case ARCHER:
-                damage+=2;
-                range+=20;
-                coolDown-=5;
+                damage += 2;
+                range += 20;
+                coolDown -= 5;
                 break;
             case CANON:
-                damage+=5;
-                range+=20;
-                coolDown-=15;
+                damage += 5;
+                range += 20;
+                coolDown -= 15;
                 break;
             case WIZARD:
-                range+=20;
-                coolDown-=10;
+                range += 20;
+                coolDown -= 10;
                 break;
         }
     }
 
-    public void update(){
+    public void update() {
         cdTick++;
     }
 
@@ -51,7 +53,7 @@ public class Tower {
     }
 
     public boolean isCooldownOver() {
-        return cdTick>=coolDown;
+        return cdTick >= coolDown;
     }
 
     private void setDefaultCoolDown() {
@@ -65,7 +67,6 @@ public class Tower {
     private void setDefaultDamage() {
         damage = getStartDamage(towerType);
     }
-
 
     public int getX() {
         return x;

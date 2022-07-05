@@ -6,7 +6,7 @@ public class Wave {
 
     private ArrayList<Integer> enemyLis;
 
-    public Wave(){
+    public Wave() {
         enemyLis = new ArrayList<>();
     }
 
@@ -14,7 +14,7 @@ public class Wave {
         this.enemyLis = enemyLis;
     }
 
-    public void addEnemy(int id){
+    public void addEnemy(int id) {
         enemyLis.add(id);
     }
 
