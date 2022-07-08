@@ -6,9 +6,14 @@ import static de.wroracer.towerdefensegame.util.Constants.Direction.RIGHT;
 import static de.wroracer.towerdefensegame.util.Constants.Direction.UP;
 
 import java.awt.Rectangle;
+import java.util.List;
 
 import de.wroracer.towerdefensegame.managers.EnemyManager;
+import de.wroracer.towerdefensegame.objects.PathPoint;
 import de.wroracer.towerdefensegame.util.Constants;
+import de.wroracer.towerdefensegame.util.Utilz;
+import de.wroracer.towerdefensegame.util.Constants.Enemies;
+import de.wroracer.towerdefensegame.util.astar.Astar;
 
 public abstract class Enemy {
 
@@ -26,7 +31,7 @@ public abstract class Enemy {
 
     protected EnemyManager enemyManager;
 
-    //private List<Position> path;
+    private List<PathPoint> path;
 
     public Enemy(float x, float y, int id, int enemyType, EnemyManager enemyManager) {
         this.x = x;
@@ -36,9 +41,73 @@ public abstract class Enemy {
         bounds = new Rectangle((int) x, (int) y, 32, 32);
         lastDirection = -1;
         this.enemyManager = enemyManager;
-        //path = Astar.astar(Astar.lvlToAstarMaze(enemyManager.getPlaying()),enemyManager.getPlaying().getStartPos(),enemyManager.getPlaying().getEndPos());
-        //System.out.println(path);
+
+        int[][] aStarLevel = Utilz.toAstarLevel(enemyManager.getLevel(),
+                enemyManager.getPlaying().getGame().getTileManager());
+
+        path = Astar.aStar(aStarLevel, enemyManager.getPlaying().getStart(), enemyManager.getPlaying().getEnd());
+        // System.out.println(path);
         setStartHealth();
+    }
+
+    public void update() {
+        // calculate path to next point
+        int direction;
+
+        if (path.size() <= 0) {
+            this.alive = false;
+            this.kill();
+            return;
+        }
+
+        int nX = (int) Math.floor(x / 32);
+        int nY = (int) Math.floor((y / 32) + 0);
+
+        PathPoint nextPoint = path.get(0);
+        if (nextPoint.getX() == nX) {
+            if (nextPoint.getY() < nY) {
+                direction = UP;
+            } else {
+                direction = DOWN;
+            }
+        } else if (nextPoint.getY() == nY) {
+            if (nextPoint.getX() < nX) {
+                direction = LEFT;
+            } else {
+                direction = RIGHT;
+            }
+        } else {
+            if (nextPoint.getX() < nX) {
+                if (nextPoint.getY() < nY) {
+                    direction = UP;
+                } else {
+                    direction = DOWN;
+                }
+            } else {
+                if (nextPoint.getY() < nY) {
+                    direction = LEFT;
+                } else {
+                    direction = RIGHT;
+                }
+            }
+        }
+
+        if (nX == nextPoint.getX() && nY == nextPoint.getY()) {
+            path.remove(0);
+            update();
+            return;
+        }
+
+        move(Enemies.getSpeed(enemyType), direction);
+
+    }
+
+    private boolean isOpposite(int direction) {
+        if (direction == -1 || lastDirection == -1) {
+            return false;
+        }
+        return (direction == LEFT && lastDirection == RIGHT) || (direction == RIGHT && lastDirection == LEFT)
+                || (direction == UP && lastDirection == DOWN) || (direction == DOWN && lastDirection == UP);
     }
 
     private void setStartHealth() {
