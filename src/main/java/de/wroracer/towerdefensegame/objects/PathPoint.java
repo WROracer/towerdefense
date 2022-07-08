@@ -42,4 +42,12 @@ public class PathPoint {
         return yCord;
     }
 
+    public int getY() {
+        return yCord;
+    }
+
+    public int getX() {
+        return xCord;
+    }
+
 }

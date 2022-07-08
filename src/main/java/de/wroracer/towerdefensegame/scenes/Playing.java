@@ -329,4 +329,16 @@ public class Playing extends GameScene implements SceneMethods {
         goldTick = 0;
         gamePaused = false;
     }
+
+    public int[][] getLevel() {
+        return this.level;
+    }
+
+    public PathPoint getStart() {
+        return start;
+    }
+
+    public PathPoint getEnd() {
+        return end;
+    }
 }

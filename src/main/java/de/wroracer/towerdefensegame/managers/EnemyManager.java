@@ -94,20 +94,26 @@ public class EnemyManager {
         //e pos
         //e dir
         //tile at new pos
-        if (e.getLastDirection() == -1) {
-            setNewDirectionAndMove(e);
-        }
-        int newX = (int) ((int) e.getX() + getSpeedAndWidth(e.getLastDirection(), e.getEnemyType()));
-        int newY = (int) ((int) e.getY() + getSpeedAndHeight(e.getLastDirection(), e.getEnemyType()));
-        if (getTileType(newX, newY) == Tiles.ROAD) {
-            e.move(Enemies.getSpeed(e.getEnemyType()), e.getLastDirection());
-        } else if (isAtEnd(e)) {
-            e.kill();
-            playing.removeOneLive();
-            //Reached the end
-        } else {
-            setNewDirectionAndMove(e);
-        }
+        // if (e.getLastDirection() == -1) {
+        //     setNewDirectionAndMove(e);
+        // }
+        // int newX = (int) ((int) e.getX() + getSpeedAndWidth(e.getLastDirection(), e.getEnemyType()));
+        // int newY = (int) ((int) e.getY() + getSpeedAndHeight(e.getLastDirection(), e.getEnemyType()));
+        // if (getTileType(newX, newY) == Tiles.ROAD) {
+        //     e.move(Enemies.getSpeed(e.getEnemyType()), e.getLastDirection());
+        // } else if (isAtEnd(e)) {
+        //     e.kill();
+        //     playing.removeOneLive();
+        //     //Reached the end
+        // } else {
+        //     setNewDirectionAndMove(e);
+        // }
+        int xCord = (int) (e.getX() / 32);
+        int yCord = (int) (e.getY() / 32);
+        int dir = e.getLastDirection();
+        fixEnemyOffsetTile(e, dir, xCord, yCord);
+
+        e.update();
     }
 
     private void setNewDirectionAndMove(Enemy e) {
@@ -139,9 +145,9 @@ public class EnemyManager {
     private void fixEnemyOffsetTile(Enemy e, int dir, int xCord, int yCord) {
         switch (dir) {
             case Direction.RIGHT:
-                //if (xCord<19){
-                //    xCord++;
-                //}
+                if (xCord < 19) {
+                    xCord++;
+                }
                 break;
             case Direction.DOWN:
                 if (yCord > 19) {
@@ -233,5 +239,9 @@ public class EnemyManager {
 
     public Playing getPlaying() {
         return playing;
+    }
+
+    public int[][] getLevel() {
+        return playing.getLevel();
     }
 }

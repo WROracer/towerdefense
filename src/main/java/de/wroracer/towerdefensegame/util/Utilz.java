@@ -5,6 +5,8 @@ import static java.lang.Math.hypot;
 
 import java.util.ArrayList;
 
+import de.wroracer.towerdefensegame.managers.TileManager;
+
 public class Utilz {
 
     public static int[][] arrayListTo2dint(ArrayList<Integer> list, int ySize, int xSize) {
@@ -46,6 +48,16 @@ public class Utilz {
                 { 0, 0, 3, 15, 1, 17, 12, 12, 12, 12, 12, 12, 16, 1, 13, 0, 0, 0, 0, 0 },
                 { 2, 2, 6, 8, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11, 0, 0, 0, 0, 0 },
         };
+    }
+
+    public static final int[][] toAstarLevel(int[][] lvl, TileManager manager) {
+        int[][] astarLvl = new int[lvl.length][lvl[0].length];
+        for (int y = 0; y < lvl.length; y++) {
+            for (int x = 0; x < lvl[y].length; x++) {
+                astarLvl[y][x] = manager.getTile(lvl[y][x]).getTileType();
+            }
+        }
+        return astarLvl;
     }
 
     public static int[] twoDto1Dint(int[][] twoArr) {
